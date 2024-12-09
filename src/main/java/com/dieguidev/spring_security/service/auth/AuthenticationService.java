@@ -2,9 +2,16 @@ package com.dieguidev.spring_security.service.auth;
 
 import com.dieguidev.spring_security.dto.RegisteredUser;
 import com.dieguidev.spring_security.dto.SaveUser;
+import com.dieguidev.spring_security.dto.auth.AuthenticationRequest;
+import com.dieguidev.spring_security.dto.auth.AuthenticationResponse;
 import com.dieguidev.spring_security.persistence.entity.User;
 import com.dieguidev.spring_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,7 +26,10 @@ public class AuthenticationService {
     @Autowired
     private JwtService jwtService;
 
-    public RegisteredUser registerOneCustomer( SaveUser newUser) {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    public RegisteredUser registerOneCustomer(SaveUser newUser) {
         User user = userService.registerOneCustomer(newUser);
 
         RegisteredUser userDto = new RegisteredUser();
@@ -35,11 +45,28 @@ public class AuthenticationService {
     }
 
     private Map<String, Object> generateExtraClaims(User user) {
-        Map<String,Object> extraClaims = new HashMap<>();
+        Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("name", user.getName());
         extraClaims.put("role", user.getRole().name());
         extraClaims.put("authorities", user.getAuthorities());
 
         return extraClaims;
+    }
+
+    public AuthenticationResponse login(AuthenticationRequest authRequest) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                authRequest.getUsername(), authRequest.getPassword()
+        );
+
+        authenticationManager.authenticate(authentication);
+
+        UserDetails user = userService.findOneByUsername(authRequest.getUsername()).get();
+        String jwt = jwtService.generateToken(user, generateExtraClaims((User)  user));
+
+        AuthenticationResponse authRsp = new AuthenticationResponse();
+        authRsp.setJwt(jwt);
+
+        return authRsp;
+
     }
 }

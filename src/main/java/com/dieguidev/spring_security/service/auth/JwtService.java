@@ -4,6 +4,7 @@ import com.dieguidev.spring_security.persistence.entity.User;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,7 +43,9 @@ public class JwtService {
 
     private Key generateKey() {
 
-        byte[] key = SECRET_KEY.getBytes();
-        return Keys.hmacShaKeyFor(key);
+        byte[] passwordDecoded = Decoders.BASE64.decode(SECRET_KEY);
+        System.out.println(new String(passwordDecoded));
+//        byte[] key = SECRET_KEY.getBytes();
+        return Keys.hmacShaKeyFor(passwordDecoded);
     }
 }
