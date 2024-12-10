@@ -61,12 +61,22 @@ public class AuthenticationService {
         authenticationManager.authenticate(authentication);
 
         UserDetails user = userService.findOneByUsername(authRequest.getUsername()).get();
-        String jwt = jwtService.generateToken(user, generateExtraClaims((User)  user));
+        String jwt = jwtService.generateToken(user, generateExtraClaims((User) user));
 
         AuthenticationResponse authRsp = new AuthenticationResponse();
         authRsp.setJwt(jwt);
 
         return authRsp;
 
+    }
+
+    public boolean validateToken(String jwt) {
+        try {
+            jwtService.extractUsername(jwt);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }
