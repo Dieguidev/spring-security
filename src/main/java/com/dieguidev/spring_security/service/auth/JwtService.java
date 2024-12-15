@@ -45,7 +45,6 @@ public class JwtService {
                 .signWith(generateKey(), Jwts.SIG.HS256)
                 .compact();
 
-
         return jwt;
     }
 
