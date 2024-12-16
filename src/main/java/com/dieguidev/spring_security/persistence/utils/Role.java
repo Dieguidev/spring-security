@@ -19,7 +19,7 @@ public enum Role {
 
             RolePermission.READ_MY_PROFILE
     )),
-    ROLE_ASSITANT_ADMINISTRATOR(Arrays.asList(
+    ROLE_ASSISTANT_ADMINISTRATOR(Arrays.asList(
             RolePermission.READ_ALL_PRODUCTS,
             RolePermission.READ_ONE_PRODUCT,
             RolePermission.UPDATE_ONE_PRODUCT,
