@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
@@ -17,6 +20,7 @@ import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)  // habilita las anotaciones @PreAuthorize y @PostAuthorize en los controladores
 public class HttpSecurityConfig {
 
     @Autowired
@@ -36,7 +40,7 @@ public class HttpSecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authReqConfig -> {
 
-                    buildRequestMatchers(authReqConfig);
+                    buildRequestMatchersV2(authReqConfig);
 
                 })
                 .build();
@@ -94,6 +98,14 @@ public class HttpSecurityConfig {
 
 //                    Autorizacion de endpoint publicos
 
+        authReqConfig.requestMatchers(HttpMethod.POST,"/customers").permitAll();
+        authReqConfig.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
+        authReqConfig.requestMatchers(HttpMethod.GET, "/auth/validate-token").permitAll();
+
+        authReqConfig.anyRequest().authenticated();
+    }
+    private static void buildRequestMatchersV2(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
+//                    Autorizacion de endpoint publicos
         authReqConfig.requestMatchers(HttpMethod.POST,"/customers").permitAll();
         authReqConfig.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
         authReqConfig.requestMatchers(HttpMethod.GET, "/auth/validate-token").permitAll();
