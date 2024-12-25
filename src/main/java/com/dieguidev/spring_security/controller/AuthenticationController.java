@@ -17,14 +17,14 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-
+    @PreAuthorize("permitAll")
     @GetMapping("validate-token")
     public ResponseEntity<Boolean> validate(@RequestParam String jwt) {
         boolean isTokenValid = authenticationService.validateToken(jwt);
         return ResponseEntity.ok(isTokenValid);
     }
 
-
+    @PreAuthorize("permitAll")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid AuthenticationRequest authenticationRequest){
 

@@ -38,11 +38,11 @@ public class HttpSecurityConfig {
                 .authenticationProvider(daoAuthProvider)
 //                esta linea es para agregar un filtro antes
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(authReqConfig -> {
-
-                    buildRequestMatchersV2(authReqConfig);
-
-                })
+//                .authorizeHttpRequests(authReqConfig -> {
+//
+//                    buildRequestMatchersV2(authReqConfig);
+//
+//                })
                 .build();
         return filterChain;
     }
