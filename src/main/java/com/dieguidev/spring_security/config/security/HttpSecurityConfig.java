@@ -14,13 +14,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)  // habilita las anotaciones @PreAuthorize y @PostAuthorize en los controladores
+//@EnableMethodSecurity(prePostEnabled = true)  // habilita las anotaciones @PreAuthorize y @PostAuthorize en los controladores
 public class HttpSecurityConfig {
 
     @Autowired
@@ -28,6 +29,9 @@ public class HttpSecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
+    private AuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,11 +42,14 @@ public class HttpSecurityConfig {
                 .authenticationProvider(daoAuthProvider)
 //                esta linea es para agregar un filtro antes
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .authorizeHttpRequests(authReqConfig -> {
-//
-//                    buildRequestMatchersV2(authReqConfig);
-//
-//                })
+                .authorizeHttpRequests(authReqConfig -> {
+
+                    buildRequestMatchers(authReqConfig);
+
+                })
+                .exceptionHandling(exceptionConfig -> {
+                    exceptionConfig.authenticationEntryPoint(customAuthenticationEntryPoint);
+                })
                 .build();
         return filterChain;
     }
@@ -104,6 +111,8 @@ public class HttpSecurityConfig {
 
         authReqConfig.anyRequest().authenticated();
     }
+
+
     private static void buildRequestMatchersV2(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authReqConfig) {
 //                    Autorizacion de endpoint publicos
         authReqConfig.requestMatchers(HttpMethod.POST,"/customers").permitAll();

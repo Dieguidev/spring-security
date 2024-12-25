@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Manejador de excepciones generales
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handlerGenericException(HttpServletRequest request, Exception e) {
         ApiError apiError = new ApiError();
@@ -28,6 +29,7 @@ public class GlobalExceptionHandler {
     }
 
 
+    // Manejador de excepciones de acceso denegado solo cuando
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handlerAccessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         ApiError apiError = new ApiError();
@@ -42,6 +44,7 @@ public class GlobalExceptionHandler {
     }
 
 
+    // Manejador de excepciones de validación de argumentos
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handlerMethodArgumentNotValidException(HttpServletRequest request,
                                                                     MethodArgumentNotValidException e) {
