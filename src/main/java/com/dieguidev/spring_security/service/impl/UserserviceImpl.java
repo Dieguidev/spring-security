@@ -2,9 +2,9 @@ package com.dieguidev.spring_security.service.impl;
 
 import com.dieguidev.spring_security.dto.SaveUser;
 import com.dieguidev.spring_security.exception.InvalidPasswordException;
-import com.dieguidev.spring_security.persistence.entity.User;
+import com.dieguidev.spring_security.persistence.entity.security.User;
 import com.dieguidev.spring_security.persistence.repository.UserRepository;
-import com.dieguidev.spring_security.persistence.utils.Role;
+import com.dieguidev.spring_security.persistence.utils.RoleEnum;
 import com.dieguidev.spring_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +31,7 @@ public class UserserviceImpl implements UserService {
         user.setUsername(newUser.getUsername());
         user.setName(newUser.getName());
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        user.setRole(Role.CUSTOMER);
+        user.setRole(RoleEnum.CUSTOMER);
 
         return userRepository.save(user);
     }

@@ -1,6 +1,5 @@
-package com.dieguidev.spring_security.persistence.entity;
+package com.dieguidev.spring_security.persistence.entity.security;
 
-import com.dieguidev.spring_security.persistence.utils.Role;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +24,10 @@ public class User implements UserDetails {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING) // this is for the enum to be saved as a string in the database
+//    private RoleEnum roleEnum;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @Override
@@ -35,7 +37,7 @@ public class User implements UserDetails {
         if (role.getPermissions() == null) return null;
 
         List<SimpleGrantedAuthority> authorities = role.getPermissions().stream()
-                .map(each -> each.name())
+                .map(each -> each.getOperation().getName())
                 .map(each -> new SimpleGrantedAuthority(each))
 //                .map(each ->{
 //                    String permission = each.name();
@@ -43,7 +45,7 @@ public class User implements UserDetails {
 //                })
                 .collect(Collectors.toList());
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role.getName()));
 
         return authorities;
     }

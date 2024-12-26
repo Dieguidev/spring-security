@@ -1,7 +1,7 @@
 package com.dieguidev.spring_security.service;
 
 import com.dieguidev.spring_security.dto.SaveUser;
-import com.dieguidev.spring_security.persistence.entity.User;
+import com.dieguidev.spring_security.persistence.entity.security.User;
 
 import java.util.Optional;
 

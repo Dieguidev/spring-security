@@ -1,7 +1,7 @@
 package com.dieguidev.spring_security.persistence.repository;
 
 
-import com.dieguidev.spring_security.persistence.entity.User;
+import com.dieguidev.spring_security.persistence.entity.security.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

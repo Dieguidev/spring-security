@@ -5,7 +5,7 @@ import com.dieguidev.spring_security.dto.SaveUser;
 import com.dieguidev.spring_security.dto.auth.AuthenticationRequest;
 import com.dieguidev.spring_security.dto.auth.AuthenticationResponse;
 import com.dieguidev.spring_security.exception.ObjectNotFoundException;
-import com.dieguidev.spring_security.persistence.entity.User;
+import com.dieguidev.spring_security.persistence.entity.security.User;
 import com.dieguidev.spring_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
