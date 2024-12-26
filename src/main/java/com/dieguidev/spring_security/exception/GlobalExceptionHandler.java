@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
 
-    // Manejador de excepciones de acceso denegado solo cuando
+    // Manejador de excepciones de acceso denegado solo cuando se utilizan decoradores en los controladores
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handlerAccessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         ApiError apiError = new ApiError();

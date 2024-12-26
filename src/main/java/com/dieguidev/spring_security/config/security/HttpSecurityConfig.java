@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AuthorizeH
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
@@ -33,6 +34,9 @@ public class HttpSecurityConfig {
     @Autowired
     private AuthenticationEntryPoint customAuthenticationEntryPoint;
 
+    @Autowired
+    private AccessDeniedHandler customAccessDeniedHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -49,6 +53,7 @@ public class HttpSecurityConfig {
                 })
                 .exceptionHandling(exceptionConfig -> {
                     exceptionConfig.authenticationEntryPoint(customAuthenticationEntryPoint);
+                    exceptionConfig.accessDeniedHandler(customAccessDeniedHandler);
                 })
                 .build();
         return filterChain;
