@@ -2,9 +2,11 @@ package com.dieguidev.spring_security.service.impl;
 
 import com.dieguidev.spring_security.dto.SaveUser;
 import com.dieguidev.spring_security.exception.InvalidPasswordException;
+import com.dieguidev.spring_security.exception.ObjectNotFoundException;
+import com.dieguidev.spring_security.persistence.entity.security.Role;
 import com.dieguidev.spring_security.persistence.entity.security.User;
-import com.dieguidev.spring_security.persistence.repository.UserRepository;
-import com.dieguidev.spring_security.persistence.utils.RoleEnum;
+import com.dieguidev.spring_security.persistence.repository.securirty.UserRepository;
+import com.dieguidev.spring_security.service.RoleService;
 import com.dieguidev.spring_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,9 @@ public class UserserviceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleService roleService;
+
     @Override
     public User registerOneCustomer(SaveUser newUser) {
 
@@ -31,7 +36,10 @@ public class UserserviceImpl implements UserService {
         user.setUsername(newUser.getUsername());
         user.setName(newUser.getName());
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        user.setRole(RoleEnum.CUSTOMER);
+
+        Role defaultRole = roleService.findDefaultRole()
+                        .orElseThrow(()-> new ObjectNotFoundException("Role not found. Default Role"));
+        user.setRole(defaultRole);
 
         return userRepository.save(user);
     }

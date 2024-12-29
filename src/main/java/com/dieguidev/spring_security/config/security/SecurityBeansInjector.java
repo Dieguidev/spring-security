@@ -1,7 +1,7 @@
 package com.dieguidev.spring_security.config.security;
 
 import com.dieguidev.spring_security.exception.ObjectNotFoundException;
-import com.dieguidev.spring_security.persistence.repository.UserRepository;
+import com.dieguidev.spring_security.persistence.repository.securirty.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

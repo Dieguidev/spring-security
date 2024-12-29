@@ -1,4 +1,4 @@
-package com.dieguidev.spring_security.persistence.repository;
+package com.dieguidev.spring_security.persistence.repository.securirty;
 
 
 import com.dieguidev.spring_security.persistence.entity.security.User;
